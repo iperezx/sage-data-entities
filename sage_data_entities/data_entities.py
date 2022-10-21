@@ -105,7 +105,7 @@ class Sensors(DataEntityBase):
 class ECR(DataEntityBase):
     def __init__(self, urlAPI):
         super().__init__(urlAPI)
-        self.exceptColmns = ['name']
+        self.exceptColmns = ['name','id']
         self.suffix = '_ecr'
         self.sagePortalEndpoint = 'https://portal.sagecontinuum.org/apps/app/'
         self.renameColumns = {'name':'pluginID'}
@@ -123,12 +123,14 @@ class ECR(DataEntityBase):
 class EdgeSched(DataEntityBase):
     def __init__(self, urlAPI):
         super().__init__(urlAPI)
-        self.exceptColmns = ['name']
+        self.exceptColmns = ['id']
         self.suffix = '_es'
-        self.renameColumns = {'name':'pluginID'}
+        self.renameColumns = {}
 
     def getESData(self,jsonCls=ndjson.Decoder,idx=0,data_key='data'):
         esData = self.getData()
         esJSON = self.convertToJson(esData,jsonCls)
         esDataDf = pd.DataFrame.from_dict(esJSON[idx][data_key])
+        esDataDf.rename(columns=self.renameColumns,inplace=True)
+        esDataDf.columns = esDataDf.columns.map(lambda x : x+self.suffix if x not in self.exceptColmns else x)
         return esDataDf
