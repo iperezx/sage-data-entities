@@ -30,6 +30,7 @@ The current Sage Data Entities and supported are the following:
 - Sensors
 - Edge Code Repository (ECR)
 - Sage Data Repository (SDR)
+- Edge Scheduler (ES)
 
 For adding another data entity of the Sage ecosystem, a user will need to use `DataEntityBase` and then write their own `get_{ENTITY}_Data` function to perform the needed data transformation. For further details, any of the child classes in [data_entities](./sage_data_entities/data_entities.py) will be great references.
 

@@ -119,3 +119,16 @@ class ECR(DataEntityBase):
         ecrDataDf.rename(columns=self.renameColumns,inplace=True)
         ecrDataDf['app_endpoint_ecr'] = self.sagePortalEndpoint + ecrDataDf.namespace_ecr + '/' + ecrDataDf.pluginID
         return ecrDataDf
+
+class EdgeSched(DataEntityBase):
+    def __init__(self, urlAPI):
+        super().__init__(urlAPI)
+        self.exceptColmns = ['name']
+        self.suffix = '_es'
+        self.renameColumns = {'name':'pluginID'}
+
+    def getESData(self,jsonCls=ndjson.Decoder,idx=0,data_key='data'):
+        esData = self.getData()
+        esJSON = self.convertToJson(esData,jsonCls)
+        esDataDf = pd.DataFrame.from_dict(esJSON[idx][data_key])
+        return esDataDf
